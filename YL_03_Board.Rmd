@@ -1,0 +1,240 @@
+---
+title: "Project 1"
+output: flexdashboard::flex_dashboard
+runtime: shiny
+---
+
+```{r global, include=FALSE}
+# load data in 'global' chunk so it can be shared by all users of the dashboard
+library(tidyverse)
+library(flexdashboard)
+
+
+#####  Question 1 a
+df1a_raw = read_rds("YL_Q1a.rds") %>% as.tibble()
+df1a = df1a_raw %>% group_by(sampleSize,method,trueValue) %>% mutate(ID = 1:n()) %>% ungroup() %>% mutate(method=as.factor(method))
+
+sv = df1a %>% pull(sampleSize) %>% unique()
+delta = df1a %>% pull(type) %>% unique()
+
+df1a_sort = df1a %>% group_by(sampleSize,method,trueValue) %>% arrange(desc(confiUpper)) %>% mutate(sortID = 1:n()) %>% ungroup()
+
+#####  Question 1 b
+
+df1b_raw = read_rds("YL_Q1b.rds") %>% as.tibble()
+df1b = df1b_raw %>% group_by(sampleSize,method,trueValue) %>% mutate(ID = 1:n()) %>% ungroup() %>% mutate(method=as.factor(method))
+df1b_sort = df1b %>% group_by(sampleSize,method,trueValue) %>% arrange(desc(confiUpper)) %>% mutate(sortID = 1:n()) %>% ungroup()
+
+##### Question 2
+
+
+df2raw = read_rds("YL_Q2.rds") %>% as.tibble()
+
+# assign ID for plotting
+df2 = df2raw %>% group_by(mixRatio,sampleSize,method,trueValue) %>% mutate(ID = 1:n()) %>% ungroup() %>% mutate(method=as.factor(method))
+
+qv2 = df2 %>% pull(mixRatio) %>% unique() %>% as.numeric()
+tv2 = df2 %>% pull(trueValue) %>% unique()
+sv2 = df2 %>% pull(sampleSize) %>% unique()
+
+# ggplot(df %>% filter(sampleSize==500,trueValue==0.2),aes(x=ID)) + 
+#   geom_segment(aes(x=ID,y=confiLower,xend=ID,yend=confiUpper),color='orange1') +
+#   geom_hline(yintercept = 0.2)
+
+
+df2_sort = df2 %>% group_by(mixRatio,sampleSize,method,trueValue) %>% arrange(desc(confiUpper)) %>% mutate(sortID = 1:n()) %>% ungroup()
+
+
+
+```
+
+# Question 1a
+
+Column {.sidebar}
+--------------------------------------------------
+
+
+```{r}
+sliderInput('sampleSize', h3('Sample Size'), min=sv[1], max=max(sv),
+            value=sv[1], step=500, round=0)
+
+selectInput(
+  "delta", label = h3("Delta (pair diff):"),
+  choices = delta, selected = delta[1]
+)
+```
+
+Population proportions: 
+
+```{r}
+renderTable({
+  tibble(p=paste0("p",1:3),value=c(0.5,0.3,0.2))
+})
+
+```
+
+Pair difference:
+
+```{r}
+renderTable({
+  tibble(delta=delta,value=c(0.2,0.3,0.1))
+})
+
+```
+
+
+Outputs
+-----------------------------------------------------------------------
+
+### Confidence Intervals
+
+```{r}
+dataset <- reactive({
+  df1a_sort %>% filter(sampleSize==input$sampleSize,type==input$delta)
+})
+
+tvalue <- reactive({
+  df1a_sort %>% filter(type==input$delta) %>% pull(trueValue) %>% unique()
+})
+renderPlot({
+  
+  p = ggplot(dataset(),aes(x=sortID)) +
+      geom_ribbon(aes(ymin= confiLower,ymax = confiUpper,fill=method),alpha=0.5)+
+      geom_hline(yintercept = tvalue(),size=1,color="dodgerblue4") + 
+      scale_y_continuous(breaks=seq(-0.25,0.65,0.1),limits=c(-0.25, 0.65)) + 
+      theme_minimal() + theme(legend.position = 'bottom')
+  
+  print(p)
+})
+```
+
+
+# Question 1b
+
+
+Column {.sidebar}
+--------------------------------------------------
+
+
+```{r}
+sliderInput('sampleSize1b', h3('Sample Size'), min=sv[1], max=max(sv),
+            value=sv[1], step=500, round=0)
+
+selectInput(
+  "delta1b", label = h3("Delta (pair diff):"),
+  choices = delta, selected = delta[1]
+)
+```
+
+Population proportions: 
+
+```{r}
+renderTable({
+  tibble(p=paste0("p",1:3),value=c(0.5,0.48,0.02))
+})
+
+```
+
+Pair difference:
+
+```{r}
+renderTable({
+  tibble(delta=delta,value=c(0.02,0.48,0.46))
+})
+
+```
+
+
+Outputs
+-----------------------------------------------------------------------
+
+### Confidence Intervals
+
+```{r}
+dataset1b <- reactive({
+  df1b_sort %>% filter(sampleSize==input$sampleSize1b,type==input$delta1b)
+})
+
+tvalue1b <- reactive({
+  df1b_sort %>% filter(type==input$delta1b) %>% pull(trueValue) %>% unique()
+})
+
+renderPlot({
+  p = ggplot(dataset1b(),aes(x=sortID)) +
+      geom_ribbon(aes(ymin= confiLower,ymax = confiUpper,fill=method),alpha=0.5)+
+      geom_hline(yintercept = tvalue1b(),size=1,color="dodgerblue4") +
+      scale_y_continuous(breaks=seq(-0.25,0.65,0.1),limits=c(-0.25, 0.65)) +
+      theme_minimal() + theme(legend.position = 'bottom')
+  
+  print(p)
+})
+```
+
+
+# Question 2
+
+
+Column {.sidebar}
+--------------------------------------------------
+
+
+```{r}
+sliderInput('sampleSize2', h3('Sample Size'), min=sv2[1], max=max(sv2),
+            value=sv2[1], step=500, round=0)
+
+selectInput(
+  "delta2", label = h3("Delta (pair diff):"),
+  choices = delta, selected = delta[1]
+)
+
+sliderInput("mixRatio",h3("Mix ratio"),min=min(qv2),max=max(qv2),
+            value = qv2[1], step=0.1, round=0)
+
+```
+
+Population proportions: 
+
+```{r}
+renderTable({
+  tibble(p=paste0("p",1:3),value1=c(0.46,0.44,0.10),
+         r=paste0("r",1:3),value2 = c(0.34,0.33,0.33))
+})
+
+```
+
+Pair difference:
+
+```{r}
+renderTable({
+  tibble(delta=delta,value=c(0.02,0.36,0.34))
+})
+
+```
+
+
+Outputs
+-----------------------------------------------------------------------
+
+### Confidence Intervals
+
+```{r}
+dataset2 <- reactive({
+  df2_sort %>% filter(sampleSize==input$sampleSize2,type==input$delta2,mixRatio==input$mixRatio)
+})
+
+tvalue2 <- reactive({
+  df2_sort %>% filter(type==input$delta2) %>% pull(trueValue) %>% unique()
+})
+
+renderPlot({
+  p2 = ggplot(dataset2(),aes(x=sortID)) +
+      geom_ribbon(aes(ymin= confiLower,ymax = confiUpper,fill=method),alpha=0.5)+
+      geom_hline(yintercept = tvalue2(),size=1,color="dodgerblue4") +
+      scale_y_continuous(breaks=seq(-0.25,0.65,0.1),limits=c(-0.25, 0.65)) +
+      theme_minimal() + theme(legend.position = 'bottom')
+  
+  print(p2)
+})
+```
+
+
