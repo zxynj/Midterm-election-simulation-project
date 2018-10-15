@@ -1,0 +1,132 @@
+---
+title: "Project 1 Coverage Ratio"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: rows
+    vertical_layout: fill
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(tidyverse)
+library(plotly)
+
+dfraw = read_rds("YL_04_coverRatio.rds")
+
+df = dfraw %>% mutate(trueValue = as.factor(trueValue))
+
+### question 1 two columns
+df1 = df %>% filter(question %>% str_detect("1"))
+
+### question 2 three columns 2 rows 
+df2 = df %>% filter(question %>% str_detect("2"))
+df2
+
+### three columns, for three trueValue or type
+
+tvals = df2 %>% pull(trueValue) %>% unique() %>% sort()
+
+```
+
+# Question 1
+
+Column
+-----------------------------------------------------------------------
+
+### Method 1
+
+```{r}
+
+i = 1
+plot_ly(data = df1 %>% filter(method==i),x=~sampleSize,y=~coverRatio,color=~trueValue,type = 'bar') %>% 
+  layout(title=paste("Coverage Ratio for","Method",i),yaxis=list(title = "Coverage Ratio",range=c(0.9,1)))
+
+```
+
+Column
+-----------------------------------------------------------------------
+
+### Method 2
+
+```{r}
+i = 2
+plot_ly(data = df1 %>% filter(method==i),x=~sampleSize,y=~coverRatio,color=~trueValue,type = 'bar') %>% 
+  layout(title=paste("Coverage Ratio for","Method",i),yaxis=list(title = "Coverage Ratio",range=c(0.9,1)))
+```
+
+
+# Question 2
+
+
+Row
+-----------------------------------------------------------------------
+
+### 
+
+```{r}
+i=1
+tval = tvals[1]
+
+plot_ly(df2 %>% filter(trueValue==tval,method==1),x=~sampleSize,y=~coverRatio,color=~mixRatio,type="bar") %>% 
+  layout(title=paste("Original true Value:",tval,"\t Method",i),yaxis=list(title = "Coverage Ratio"))
+
+```
+
+### 
+
+```{r}
+
+tval = tvals[2]
+
+plot_ly(df2 %>% filter(trueValue==tval,method==1),x=~sampleSize,y=~coverRatio,color=~mixRatio,type="bar") %>% 
+  layout(title=paste("Original true Value:",tval,"\t Method",i),yaxis=list(title = "Coverage Ratio"))
+
+```
+
+### 
+
+```{r}
+
+tval = tvals[3]
+
+plot_ly(df2 %>% filter(trueValue==tval,method==1),x=~sampleSize,y=~coverRatio,color=~mixRatio,type="bar") %>% 
+  layout(title=paste("Original true Value:",tval,"\t Method",i),yaxis=list(title = "Coverage Ratio"))
+
+```
+
+Row
+-----------------------------------------------------------------------
+
+
+### 
+
+```{r}
+i=2
+tval = tvals[1]
+
+plot_ly(df2 %>% filter(trueValue==tval,method==1),x=~sampleSize,y=~coverRatio,color=~mixRatio,type="bar") %>% 
+  layout(title=paste("Original true Value:",tval,"\t Method",i),yaxis=list(title = "Coverage Ratio"))
+
+```
+
+### 
+
+```{r}
+
+tval = tvals[2]
+
+plot_ly(df2 %>% filter(trueValue==tval,method==1),x=~sampleSize,y=~coverRatio,color=~mixRatio,type="bar") %>% 
+  layout(title=paste("Original true Value:",tval,"\t Method",i),yaxis=list(title = "Coverage Ratio"))
+
+```
+
+### 
+
+```{r}
+
+tval = tvals[3]
+
+plot_ly(df2 %>% filter(trueValue==tval,method==1),x=~sampleSize,y=~coverRatio,color=~mixRatio,type="bar") %>% 
+  layout(title=paste("Original true Value:",tval,"\t Method",i),yaxis=list(title = "Coverage Ratio"))
+
+```
