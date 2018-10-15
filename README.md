@@ -11,4 +11,4 @@ https://yitao.shinyapps.io/YL_03_Board/
 
 ## the coverage ratio plot
 
-http://rpubs.com/yitao/project1_covRatio
+https://yitao416.github.io/onlinePlots/YL_05_coverRatioBoard.html
