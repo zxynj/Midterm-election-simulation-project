@@ -8,3 +8,7 @@ The result is saved as rds format. Download them into your local directory. And 
 
 https://yitao.shinyapps.io/YL_03_Board/
 
+
+## the coverage ratio plot
+
+http://rpubs.com/yitao/project1_covRatio
