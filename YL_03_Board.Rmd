@@ -12,7 +12,7 @@ library(flexdashboard)
 
 #####  Question 1 a
 df1a_raw = read_rds("YL_Q1a.rds") %>% as.tibble()
-df1a = df1a_raw %>% group_by(sampleSize,method,trueValue) %>% mutate(ID = 1:n()) %>% ungroup() %>% mutate(method=as.factor(method))
+df1a = df1a_raw %>% mutate(method=as.factor(method))
 
 sv = df1a %>% pull(sampleSize) %>% unique()
 delta = df1a %>% pull(type) %>% unique()
@@ -22,7 +22,7 @@ df1a_sort = df1a %>% group_by(sampleSize,method,trueValue) %>% arrange(desc(conf
 #####  Question 1 b
 
 df1b_raw = read_rds("YL_Q1b.rds") %>% as.tibble()
-df1b = df1b_raw %>% group_by(sampleSize,method,trueValue) %>% mutate(ID = 1:n()) %>% ungroup() %>% mutate(method=as.factor(method))
+df1b = df1b_raw %>% mutate(method=as.factor(method))
 df1b_sort = df1b %>% group_by(sampleSize,method,trueValue) %>% arrange(desc(confiUpper)) %>% mutate(sortID = 1:n()) %>% ungroup()
 
 ##### Question 2
@@ -31,7 +31,7 @@ df1b_sort = df1b %>% group_by(sampleSize,method,trueValue) %>% arrange(desc(conf
 df2raw = read_rds("YL_Q2.rds") %>% as.tibble()
 
 # assign ID for plotting
-df2 = df2raw %>% group_by(mixRatio,sampleSize,method,trueValue) %>% mutate(ID = 1:n()) %>% ungroup() %>% mutate(method=as.factor(method))
+df2 = df2raw %>% mutate(method=as.factor(method))
 
 qv2 = df2 %>% pull(mixRatio) %>% unique() %>% as.numeric()
 tv2 = df2 %>% pull(trueValue) %>% unique()

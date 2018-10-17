@@ -2,7 +2,6 @@
 title: "Project 1 Coverage Ratio"
 output: 
   flexdashboard::flex_dashboard:
-    orientation: rows
     vertical_layout: fill
 ---
 
@@ -11,7 +10,7 @@ library(flexdashboard)
 library(tidyverse)
 library(plotly)
 
-dfraw = read_rds("YL_04_coverRatio.rds")
+dfraw = read_rds("YL_04_coverRatio_ind.rds")
 
 df = dfraw %>% mutate(trueValue = as.factor(trueValue))
 
@@ -26,9 +25,17 @@ df2
 
 tvals = df2 %>% pull(trueValue) %>% unique() %>% sort()
 
+
+### joint data ###
+dfjointraw = read_rds("YL_04_coverRatio_joint.rds")
+dfjoint = dfjointraw %>% mutate(method = as.factor(method))
+dfjoint1 = dfjoint %>% filter(question %>% str_detect("1"))
+dfjoint2 = dfjoint %>% filter(question %>% str_detect("2"))
+
+
 ```
 
-# Question 1
+# Question 1 Individual
 
 Column
 -----------------------------------------------------------------------
@@ -38,7 +45,9 @@ Column
 ```{r}
 
 i = 1
-plot_ly(data = df1 %>% filter(method==i),x=~sampleSize,y=~coverRatio,color=~trueValue,type = 'bar') %>% 
+plot_ly(data = df1 %>% filter(method==i),
+        x=~sampleSize,y=~coverRatio,color=~trueValue,
+        type = 'bar',name=~paste("True Value",trueValue)) %>% 
   layout(title=paste("Coverage Ratio for","Method",i),yaxis=list(title = "Coverage Ratio",range=c(0.9,1)))
 
 ```
@@ -50,12 +59,45 @@ Column
 
 ```{r}
 i = 2
-plot_ly(data = df1 %>% filter(method==i),x=~sampleSize,y=~coverRatio,color=~trueValue,type = 'bar') %>% 
+plot_ly(data = df1 %>% filter(method==i),
+        x=~sampleSize,y=~coverRatio,color=~trueValue,
+        type = 'bar',name=~paste("True Value",trueValue)) %>% 
   layout(title=paste("Coverage Ratio for","Method",i),yaxis=list(title = "Coverage Ratio",range=c(0.9,1)))
 ```
 
 
-# Question 2
+
+# Question 1 Joint
+
+Column
+-----------------------------------------------------------------------
+
+### Method 1
+
+```{r}
+
+i = "1a"
+plot_ly(data = dfjoint1 %>% filter(question==i),
+        x=~sampleSize,y=~jointRatio,color=~method,type = 'bar',name=~paste("method",method)) %>% 
+  layout(title=paste("Joint Coverage Ratio for","Question",i),yaxis=list(title = "Joint Coverage Ratio",range=c(0.9,1)))
+
+```
+
+Column
+-----------------------------------------------------------------------
+
+### Method 2
+
+```{r}
+i = "1b"
+plot_ly(data = dfjoint1 %>% filter(question==i),
+        x=~sampleSize,y=~jointRatio,color=~method,type = 'bar',name=~paste("method",method)) %>% 
+  layout(title=paste("Joint Coverage Ratio for","Question",i),yaxis=list(title = "Joint Coverage Ratio",range=c(0.9,1)))
+
+```
+
+
+# Question 2 Individual
 
 
 Row
@@ -67,8 +109,9 @@ Row
 i=1
 tval = tvals[1]
 
-plot_ly(df2 %>% filter(trueValue==tval,method==1),x=~sampleSize,y=~coverRatio,color=~mixRatio,type="bar") %>% 
-  layout(title=paste("Original true Value:",tval,"\t Method",i),yaxis=list(title = "Coverage Ratio"))
+plot_ly(df2 %>% filter(trueValue==tval,method==1),x=~sampleSize,y=~coverRatio,color=~mixRatio,
+        type="bar",name=~paste("Mix:",mixRatio)) %>% 
+  layout(title=paste("Original true Value:",tval,"\t Method",i),yaxis=list(title = "Coverage Ratio",range=c(0.95,1)))
 
 ```
 
@@ -78,7 +121,8 @@ plot_ly(df2 %>% filter(trueValue==tval,method==1),x=~sampleSize,y=~coverRatio,co
 
 tval = tvals[2]
 
-plot_ly(df2 %>% filter(trueValue==tval,method==1),x=~sampleSize,y=~coverRatio,color=~mixRatio,type="bar") %>% 
+plot_ly(df2 %>% filter(trueValue==tval,method==1),x=~sampleSize,y=~coverRatio,color=~mixRatio,
+        name=~paste("Mix:",mixRatio),type="bar") %>% 
   layout(title=paste("Original true Value:",tval,"\t Method",i),yaxis=list(title = "Coverage Ratio"))
 
 ```
@@ -89,7 +133,8 @@ plot_ly(df2 %>% filter(trueValue==tval,method==1),x=~sampleSize,y=~coverRatio,co
 
 tval = tvals[3]
 
-plot_ly(df2 %>% filter(trueValue==tval,method==1),x=~sampleSize,y=~coverRatio,color=~mixRatio,type="bar") %>% 
+plot_ly(df2 %>% filter(trueValue==tval,method==1),x=~sampleSize,y=~coverRatio,color=~mixRatio,
+        name=~paste("Mix:",mixRatio),type="bar") %>% 
   layout(title=paste("Original true Value:",tval,"\t Method",i),yaxis=list(title = "Coverage Ratio"))
 
 ```
@@ -104,8 +149,9 @@ Row
 i=2
 tval = tvals[1]
 
-plot_ly(df2 %>% filter(trueValue==tval,method==1),x=~sampleSize,y=~coverRatio,color=~mixRatio,type="bar") %>% 
-  layout(title=paste("Original true Value:",tval,"\t Method",i),yaxis=list(title = "Coverage Ratio"))
+plot_ly(df2 %>% filter(trueValue==tval,method==1),x=~sampleSize,y=~coverRatio,color=~mixRatio,
+        name=~paste("Mix:",mixRatio), type="bar") %>% 
+  layout(title=paste("Original true Value:",tval,"\t Method",i),yaxis=list(title = "Coverage Ratio",range=c(0.95,1)))
 
 ```
 
@@ -115,7 +161,8 @@ plot_ly(df2 %>% filter(trueValue==tval,method==1),x=~sampleSize,y=~coverRatio,co
 
 tval = tvals[2]
 
-plot_ly(df2 %>% filter(trueValue==tval,method==1),x=~sampleSize,y=~coverRatio,color=~mixRatio,type="bar") %>% 
+plot_ly(df2 %>% filter(trueValue==tval,method==1),x=~sampleSize,y=~coverRatio,color=~mixRatio,
+        name=~paste("Mix:",mixRatio),type="bar") %>% 
   layout(title=paste("Original true Value:",tval,"\t Method",i),yaxis=list(title = "Coverage Ratio"))
 
 ```
@@ -126,7 +173,40 @@ plot_ly(df2 %>% filter(trueValue==tval,method==1),x=~sampleSize,y=~coverRatio,co
 
 tval = tvals[3]
 
-plot_ly(df2 %>% filter(trueValue==tval,method==1),x=~sampleSize,y=~coverRatio,color=~mixRatio,type="bar") %>% 
+plot_ly(df2 %>% filter(trueValue==tval,method==1),x=~sampleSize,y=~coverRatio,color=~mixRatio,
+        name=~paste("Mix:",mixRatio),type="bar") %>% 
   layout(title=paste("Original true Value:",tval,"\t Method",i),yaxis=list(title = "Coverage Ratio"))
 
 ```
+
+
+# Question 2 Joint
+
+Column
+-----------------------------------------------------------------------
+
+### Method 1
+
+```{r}
+i = 1
+plot_ly(data = dfjoint2 %>% filter(method==i),
+        x=~sampleSize,y=~jointRatio,color=~mixRatio,type = 'bar',name=~paste("MixRatio",mixRatio)) %>% 
+  layout(title=paste("Joint Coverage Ratio for","Method",i),yaxis=list(title = "Joint Coverage Ratio"))
+
+```
+
+Column
+-----------------------------------------------------------------------
+
+### Method 2
+
+```{r}
+
+i = 2
+plot_ly(data = dfjoint2 %>% filter(method==i),
+        x=~sampleSize,y=~jointRatio,color=~mixRatio,type = 'bar',name=~paste("MixRatio",mixRatio)) %>% 
+  layout(title=paste("Joint Coverage Ratio for","Method",i),yaxis=list(title = "Joint Coverage Ratio"))
+
+```
+
+

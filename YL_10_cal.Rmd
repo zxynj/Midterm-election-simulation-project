@@ -2,7 +2,9 @@
 title: "Project 1 function"
 author: "YL"
 date: "October 10, 2018"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -38,7 +40,7 @@ Generate 2 simulated data, for example:
 
 ```{r data, echo=T}
 set.seed(321)
-df = rmultinom(2, size = sampleSizeVector[1], prob = p)
+df =  rbind(rmultinom(2, size = sampleSizeVector[1], prob = p),trialID = 1:2)
 df
 ```
 
@@ -51,7 +53,7 @@ Each column is one poll. You can see the distribtuion is about `r p`. Then a fun
 ## a dataframe is returned with complete result
 
 confiFun <- function(singleSample,type,i,j){
-  N = sum(singleSample)   #the column sum; sample size
+  N = sum(singleSample[1:3])   #the column sum; sample size
 
   phat_i = singleSample[i] / N  # the estimated p_i
   phat_j = singleSample[j] / N # the estimated p_j
@@ -66,7 +68,8 @@ confiFun <- function(singleSample,type,i,j){
   
   ## return a dataframe that named column
   return(data.frame(confiLower = confiLower,confiUpper = confiUpper,
-                    type=type,method=c(1L,2L),trueValue = p[i]-p[j]))
+                    type=type,method=c(1L,2L),trueValue = p[i]-p[j],
+                    trialID = singleSample[[4]]))
 }
 ```
 
@@ -83,7 +86,7 @@ Since we have two column, the result is the length 2 list, where each element is
 ```{r}
 confiDataFun <- function(sampleSize,nrep=2){
   set.seed(321)
-  df = rmultinom(nrep, size = sampleSize, prob = p)
+  df = rbind(rmultinom(nrep, size = sampleSizeVector[1], prob = p),trialID = 1:nrep)
   
   delta_12 = apply(df, 2,confiFun,type="p1-p2",i=1,j=2)
   delta_13 = apply(df, 2,confiFun,type="p1-p3",i=1,j=3)
@@ -165,6 +168,7 @@ colSums(dfmix)
 Once we have the similiar data at question 1. We can just simply apply the defined functions.
 
 ```{r}
+dfmix = rbind(dfmix,trialID=1:2) # add trial id as last row
 tmp = apply(dfmix, 2,confiFun,type="p1-p2",i=1,j=2)
 tmp
 ```
@@ -188,6 +192,7 @@ confiMixDataFun <- function(sampleSize,q,r = c(0.34,0.33,0.33),nrep=2){
   })
   NVmat = Reduce(cbind,NVList) 
   dfmix = Vmat+ NVmat
+  dfmix = rbind(dfmix,trialID=1:nrep)
   
   delta_12 = apply(dfmix, 2,confiFun,type="p1-p2",i=1,j=2)
   delta_13 = apply(dfmix, 2,confiFun,type="p1-p3",i=1,j=3)
