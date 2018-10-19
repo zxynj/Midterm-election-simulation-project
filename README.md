@@ -12,3 +12,17 @@ https://yitao.shinyapps.io/YL_03_Board_02/
 ## the coverage ratio plot
 
 https://yitao416.github.io/onlinePlots/YL_05_coverRatioBoard.html
+
+
+# Task:
+
+Xinyu: 03 flexboard with shiny
+
+Xiao, Erica:  04 calcuate coverage, 05 flexboard with plot
+
+
+Note: 
+
+Introduction about tidyverse
+http://sjspielman.org/bio5312_fall2017/day2_tidyverse1
+
