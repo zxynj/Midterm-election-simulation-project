@@ -16,9 +16,11 @@ https://yitao416.github.io/onlinePlots/YL_05_coverRatioBoard.html
 
 # Task:
 
-Xinyu: 03 flexboard with shiny
+Download all files ending with **rds** to your local directory. 
 
-Xiao, Erica:  04 calcuate coverage, 05 flexboard with plot
+## Xinyu: 03 flexboard with shiny
+
+## Xiao, Erica:  04 calcuate coverage, 05 flexboard with plot
 
 
 Note: 
