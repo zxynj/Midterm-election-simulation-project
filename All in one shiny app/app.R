@@ -1,6 +1,7 @@
 library(shiny)
 library(parallel)
 library(ggplot2)
+library(reshape2)
 
 source("https://raw.githubusercontent.com/zxynj/Midterm-election-simulation-project/master/All%20in%20one%20shiny%20app/functions.R")
 cl=makeCluster(1)
