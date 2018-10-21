@@ -4,7 +4,7 @@ library(ggplot2)
 library(reshape2)
 
 source("https://raw.githubusercontent.com/zxynj/Midterm-election-simulation-project/master/All%20in%20one%20shiny%20app/functions.R")
-cl=makeCluster(1)
+cl=makeCluster(detectCores())
 clusterExport(cl=cl, varlist=c("data_simulation_fun","estimation_process_fun","m1_ci_fun","m2_ci_fun","simulation_coverage_fun","execute_all_fun"),envir=environment())
 
 ui <- fluidPage(
