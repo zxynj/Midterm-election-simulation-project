@@ -10,65 +10,121 @@ library(flexdashboard)
 library(tidyverse)
 library(plotly)
 
-dfraw = read_rds("YL_04_coverRatio_ind.rds")
+dfraw <- read_rds("YL_04_coverRatio_ind.rds")
 
-df = dfraw %>% mutate(trueValue = as.factor(trueValue))
+df <- dfraw %>% mutate(trueValue = as.factor(trueValue))
 
 ### question 1 two columns
-df1 = df %>% filter(question %>% str_detect("1"))
+df1 <- df %>% filter(question %>% str_detect("1"))
 
-### question 2 three columns 2 rows 
-df2 = df %>% filter(question %>% str_detect("2"))
+### question 2 three columns 2 rows
+df2 <- df %>% filter(question %>% str_detect("2"))
 df2
 
 ### three columns, for three trueValue or type
 
-tvals = df2 %>% pull(trueValue) %>% unique() %>% sort()
+tvals <- df2 %>% pull(trueValue) %>% unique() %>% sort()
 
 
 ### joint data ###
-dfjointraw = read_rds("YL_04_coverRatio_joint.rds")
-dfjoint = dfjointraw %>% mutate(method = as.factor(method))
-dfjoint1 = dfjoint %>% filter(question %>% str_detect("1"))
-dfjoint2 = dfjoint %>% filter(question %>% str_detect("2"))
-
-
+dfjointraw <- read_rds("YL_04_coverRatio_joint.rds")
+dfjoint <- dfjointraw %>% mutate(method = as.factor(method))
+dfjoint1 <- dfjoint %>% filter(question %>% str_detect("1"))
+dfjoint2 <- dfjoint %>% filter(question %>% str_detect("2"))
 ```
 
 # Question 1 Individual
 
-Column
------------------------------------------------------------------------
+### Ratio
 
-### Method 1
+Q 1a
 
 ```{r}
-
-i = 1
-plot_ly(data = df1 %>% filter(method==i),
-        x=~sampleSize,y=~coverRatio,color=~trueValue,
-        type = 'bar',name=~paste("True Value",trueValue)) %>% 
-  layout(title=paste("Coverage Ratio for","Method",i),yaxis=list(title = "Coverage Ratio",range=c(0.9,1)))
-
+knitr::kable(tibble(p = paste0("p", 1:3), value = c(0.5, 0.3, 0.2)))
 ```
 
-Column
------------------------------------------------------------------------
-
-### Method 2
+Q 1b
 
 ```{r}
-i = 2
-plot_ly(data = df1 %>% filter(method==i),
-        x=~sampleSize,y=~coverRatio,color=~trueValue,
-        type = 'bar',name=~paste("True Value",trueValue)) %>% 
-  layout(title=paste("Coverage Ratio for","Method",i),yaxis=list(title = "Coverage Ratio",range=c(0.9,1)))
+knitr::kable(tibble(r = paste0("p", 1:3), value = c(0.5, 0.48, 0.02)))
 ```
 
 
+Row 
+-----------------------------------------------------------------------
+
+
+### 1a Method 1
+
+```{r}
+
+i <- 1
+plot_ly(
+  data = df1 %>% filter(method == i, trueValue %in% c(0.1, 0.2, 0.3)),
+  x = ~sampleSize, y = ~coverRatio, color = ~trueValue,
+  type = "bar", name = ~paste("True Value", trueValue)
+) %>%
+  layout(title = paste("Coverage Ratio for", "Method", i), yaxis = list(title = "Coverage Ratio", range = c(0.9, 1)))
+```
+
+### 1b Method 1
+
+```{r}
+
+i <- 1
+plot_ly(
+  data = df1 %>% filter(method == i, trueValue %in% c(0.02, 0.46, 0.48)),
+  x = ~sampleSize, y = ~coverRatio, color = ~trueValue,
+  type = "bar", name = ~paste("True Value", trueValue)
+) %>%
+  layout(title = paste("Coverage Ratio for", "Method", i), yaxis = list(title = "Coverage Ratio", range = c(0.9, 1)))
+```
+
+Row
+-----------------------------------------------------------------------
+
+### 1a Method 2
+
+```{r}
+i <- 2
+plot_ly(
+  data = df1 %>% filter(method == i, trueValue %in% c(0.1, 0.2, 0.3)),
+  x = ~sampleSize, y = ~coverRatio, color = ~trueValue,
+  type = "bar", name = ~paste("True Value", trueValue)
+) %>%
+  layout(title = paste("Coverage Ratio for", "Method", i), yaxis = list(title = "Coverage Ratio", range = c(0.9, 1)))
+```
+
+### 1b Method 2
+
+```{r}
+i <- 2
+plot_ly(
+  data = df1 %>% filter(method == i, trueValue %in% c(0.02, 0.46, 0.48)),
+  x = ~sampleSize, y = ~coverRatio, color = ~trueValue,
+  type = "bar", name = ~paste("True Value", trueValue)
+) %>%
+  layout(title = paste("Coverage Ratio for", "Method", i), yaxis = list(title = "Coverage Ratio", range = c(0.9, 1)))
+```
 
 # Question 1 Joint
 
+
+### Ratio
+
+Q 1a
+
+```{r}
+knitr::kable(tibble(p = paste0("p", 1:3), value = c(0.5, 0.3, 0.2)))
+```
+
+Q 1b
+
+```{r}
+knitr::kable(tibble(r = paste0("p", 1:3), value = c(0.5, 0.48, 0.02)))
+```
+
+
 Column
 -----------------------------------------------------------------------
 
@@ -76,11 +132,12 @@ Column
 
 ```{r}
 
-i = "1a"
-plot_ly(data = dfjoint1 %>% filter(question==i),
-        x=~sampleSize,y=~jointRatio,color=~method,type = 'bar',name=~paste("method",method)) %>% 
-  layout(title=paste("Joint Coverage Ratio for","Question",i),yaxis=list(title = "Joint Coverage Ratio",range=c(0.9,1)))
-
+i <- "1a"
+plot_ly(
+  data = dfjoint1 %>% filter(question == i),
+  x = ~sampleSize, y = ~jointRatio, color = ~method, type = "bar", name = ~paste("method", method)
+) %>%
+  layout(title = paste("Joint Coverage Ratio for", "Question", i), yaxis = list(title = "Joint Coverage Ratio", range = c(0.9, 1)))
 ```
 
 Column
@@ -89,98 +146,133 @@ Column
 ### Method 2
 
 ```{r}
-i = "1b"
-plot_ly(data = dfjoint1 %>% filter(question==i),
-        x=~sampleSize,y=~jointRatio,color=~method,type = 'bar',name=~paste("method",method)) %>% 
-  layout(title=paste("Joint Coverage Ratio for","Question",i),yaxis=list(title = "Joint Coverage Ratio",range=c(0.9,1)))
-
+i <- "1b"
+plot_ly(
+  data = dfjoint1 %>% filter(question == i),
+  x = ~sampleSize, y = ~jointRatio, color = ~method, type = "bar", name = ~paste("method", method)
+) %>%
+  layout(title = paste("Joint Coverage Ratio for", "Question", i), yaxis = list(title = "Joint Coverage Ratio", range = c(0.9, 1)))
 ```
 
 
 # Question 2 Individual
 
-
-Row
------------------------------------------------------------------------
-
-### 
+### Ratio
 
 ```{r}
-i=1
-tval = tvals[1]
-
-plot_ly(df2 %>% filter(trueValue==tval,method==1),x=~sampleSize,y=~coverRatio,color=~mixRatio,
-        type="bar",name=~paste("Mix:",mixRatio)) %>% 
-  layout(title=paste("Original true Value:",tval,"\t Method",i),yaxis=list(title = "Coverage Ratio",range=c(0.95,1)))
-
+knitr::kable(tibble(p = paste0("p", 1:3), value = c(0.46, 0.44, 0.10)))
 ```
 
-### 
-
 ```{r}
-
-tval = tvals[2]
-
-plot_ly(df2 %>% filter(trueValue==tval,method==1),x=~sampleSize,y=~coverRatio,color=~mixRatio,
-        name=~paste("Mix:",mixRatio),type="bar") %>% 
-  layout(title=paste("Original true Value:",tval,"\t Method",i),yaxis=list(title = "Coverage Ratio"))
-
+knitr::kable(tibble(r = paste0("r", 1:3), value = c(0.34, 0.33, 0.33)))
 ```
 
-### 
-
 ```{r}
-
-tval = tvals[3]
-
-plot_ly(df2 %>% filter(trueValue==tval,method==1),x=~sampleSize,y=~coverRatio,color=~mixRatio,
-        name=~paste("Mix:",mixRatio),type="bar") %>% 
-  layout(title=paste("Original true Value:",tval,"\t Method",i),yaxis=list(title = "Coverage Ratio"))
-
+knitr::kable(tibble(delta = paste("delta", 1:3), value = c(0.02, 0.36, 0.34)))
 ```
 
 Row
 -----------------------------------------------------------------------
 
-
 ### 
 
 ```{r}
-i=2
-tval = tvals[1]
+i <- 1
+tval <- tvals[1]
 
-plot_ly(df2 %>% filter(trueValue==tval,method==1),x=~sampleSize,y=~coverRatio,color=~mixRatio,
-        name=~paste("Mix:",mixRatio), type="bar") %>% 
-  layout(title=paste("Original true Value:",tval,"\t Method",i),yaxis=list(title = "Coverage Ratio",range=c(0.95,1)))
-
+plot_ly(df2 %>% filter(trueValue == tval, method == 1),
+  x = ~sampleSize, y = ~coverRatio, color = ~mixRatio,
+  type = "bar", name = ~paste("Mix:", mixRatio)
+) %>%
+  layout(title = paste("Original true Value:", tval, "\t Method", i), yaxis = list(title = "Coverage Ratio", range = c(0.95, 1)))
 ```
 
 ### 
 
 ```{r}
 
-tval = tvals[2]
+tval <- tvals[2]
 
-plot_ly(df2 %>% filter(trueValue==tval,method==1),x=~sampleSize,y=~coverRatio,color=~mixRatio,
-        name=~paste("Mix:",mixRatio),type="bar") %>% 
-  layout(title=paste("Original true Value:",tval,"\t Method",i),yaxis=list(title = "Coverage Ratio"))
-
+plot_ly(df2 %>% filter(trueValue == tval, method == 1),
+  x = ~sampleSize, y = ~coverRatio, color = ~mixRatio,
+  name = ~paste("Mix:", mixRatio), type = "bar"
+) %>%
+  layout(title = paste("Original true Value:", tval, "\t Method", i), yaxis = list(title = "Coverage Ratio"))
 ```
 
 ### 
 
 ```{r}
 
-tval = tvals[3]
+tval <- tvals[3]
 
-plot_ly(df2 %>% filter(trueValue==tval,method==1),x=~sampleSize,y=~coverRatio,color=~mixRatio,
-        name=~paste("Mix:",mixRatio),type="bar") %>% 
-  layout(title=paste("Original true Value:",tval,"\t Method",i),yaxis=list(title = "Coverage Ratio"))
+plot_ly(df2 %>% filter(trueValue == tval, method == 1),
+  x = ~sampleSize, y = ~coverRatio, color = ~mixRatio,
+  name = ~paste("Mix:", mixRatio), type = "bar"
+) %>%
+  layout(title = paste("Original true Value:", tval, "\t Method", i), yaxis = list(title = "Coverage Ratio"))
+```
 
+Row
+-----------------------------------------------------------------------
+
+
+### 
+
+```{r}
+i <- 2
+tval <- tvals[1]
+
+plot_ly(df2 %>% filter(trueValue == tval, method == 1),
+  x = ~sampleSize, y = ~coverRatio, color = ~mixRatio,
+  name = ~paste("Mix:", mixRatio), type = "bar"
+) %>%
+  layout(title = paste("Original true Value:", tval, "\t Method", i), yaxis = list(title = "Coverage Ratio", range = c(0.95, 1)))
+```
+
+### 
+
+```{r}
+
+tval <- tvals[2]
+
+plot_ly(df2 %>% filter(trueValue == tval, method == 1),
+  x = ~sampleSize, y = ~coverRatio, color = ~mixRatio,
+  name = ~paste("Mix:", mixRatio), type = "bar"
+) %>%
+  layout(title = paste("Original true Value:", tval, "\t Method", i), yaxis = list(title = "Coverage Ratio"))
+```
+
+### 
+
+```{r}
+
+tval <- tvals[3]
+
+plot_ly(df2 %>% filter(trueValue == tval, method == 1),
+  x = ~sampleSize, y = ~coverRatio, color = ~mixRatio,
+  name = ~paste("Mix:", mixRatio), type = "bar"
+) %>%
+  layout(title = paste("Original true Value:", tval, "\t Method", i), yaxis = list(title = "Coverage Ratio"))
 ```
 
 
 # Question 2 Joint
+
+
+### Ratio
+
+```{r}
+knitr::kable(tibble(p = paste0("p", 1:3), value = c(0.46, 0.44, 0.10)))
+```
+
+```{r}
+knitr::kable(tibble(r = paste0("r", 1:3), value = c(0.34, 0.33, 0.33)))
+```
+
+```{r}
+knitr::kable(tibble(delta = paste("delta", 1:3), value = c(0.02, 0.36, 0.34)))
+```
 
 Column
 -----------------------------------------------------------------------
@@ -188,11 +280,12 @@ Column
 ### Method 1
 
 ```{r}
-i = 1
-plot_ly(data = dfjoint2 %>% filter(method==i),
-        x=~sampleSize,y=~jointRatio,color=~mixRatio,type = 'bar',name=~paste("MixRatio",mixRatio)) %>% 
-  layout(title=paste("Joint Coverage Ratio for","Method",i),yaxis=list(title = "Joint Coverage Ratio"))
-
+i <- 1
+plot_ly(
+  data = dfjoint2 %>% filter(method == i),
+  x = ~sampleSize, y = ~jointRatio, color = ~mixRatio, type = "bar", name = ~paste("MixRatio", mixRatio)
+) %>%
+  layout(title = paste("Joint Coverage Ratio for", "Method", i), yaxis = list(title = "Joint Coverage Ratio"))
 ```
 
 Column
@@ -202,11 +295,14 @@ Column
 
 ```{r}
 
-i = 2
-plot_ly(data = dfjoint2 %>% filter(method==i),
-        x=~sampleSize,y=~jointRatio,color=~mixRatio,type = 'bar',name=~paste("MixRatio",mixRatio)) %>% 
-  layout(title=paste("Joint Coverage Ratio for","Method",i),yaxis=list(title = "Joint Coverage Ratio"))
-
+i <- 2
+plot_ly(
+  data = dfjoint2 %>% filter(method == i),
+  x = ~sampleSize, y = ~jointRatio, color = ~mixRatio, type = "bar", name = ~paste("MixRatio", mixRatio)
+) %>%
+  layout(title = paste("Joint Coverage Ratio for", "Method", i), yaxis = list(title = "Joint Coverage Ratio"))
 ```
+
+
 
 
