@@ -4,6 +4,7 @@ library(rpgm)
 library(ggplot2)
 library(compiler)
 library(gridExtra)
+library(reshape2)
 
 source("https://raw.githubusercontent.com/zxynj/Midterm-election-simulation-project/master/All%20in%20one%20shiny%20app/simplified%20functions2.R")
 execute_all_fun_comp <- cmpfun(execute_all_fun3)
