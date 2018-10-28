@@ -5,7 +5,7 @@ library(ggplot2)
 library(compiler)
 library(gridExtra)
 
-source("C:\\Users\\xinyu.zhang\\Documents\\R\\stat6341\\Midterm-election-simulation-project\\simplified functions2.R")
+source("https://raw.githubusercontent.com/zxynj/Midterm-election-simulation-project/master/All%20in%20one%20shiny%20app/simplified%20functions2.R")
 execute_all_fun_comp <- cmpfun(execute_all_fun3)
 
 cl=makeCluster(8)
