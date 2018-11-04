@@ -9,9 +9,9 @@ The result is saved as rds format. Download them into your local directory. And 
 https://yitao.shinyapps.io/YL_03_Board_02/
 
 
-## the coverage ratio plot
+## the coverage ratio plot (Update at 23 Oct)
 
-https://yitao416.github.io/onlinePlots/YL_05_coverRatioBoard.html
+https://yitao416.github.io/onlinePlots/Archive/YL_05_coverRatioBoard.html
 
 
 # Task:
