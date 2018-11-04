@@ -1,7 +1,7 @@
 ---
-title: "Project 1 function"
-author: "YL"
-date: "October 10, 2018"
+title: "Project 1"
+author: "Yitao, Xinyu, Jiwon, Xiao"
+date: "Nov 3, 2018"
 output:
   pdf_document: default
   html_document: default
@@ -11,32 +11,40 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Intro
+## Project information:
 
-This is an R Markdown document for project 1: <http://utdallas.edu/~ammann/stat6341/node10.html>.
+Project 1: <http://utdallas.edu/~ammann/stat6341/node10.html>
 
-## Question 1
+
+__Yitao__: Calucation  
+__Xiao__:  Confidence interval  
+__Jiwon__: Coverage ratio  
+__Xinyu__: Verification and extendation
+
+
+## Question 1: No contamination
 Setup:
 
 ```{r}
 p = c(0.5,0.3,0.2)
 alpha = 0.05
-sampleSizeVector=c(500,1000,1500)
+sampleSizeVector=c(500,1000,1500) # sample size vector
+
 # parameter for method 1
 m=3
 M = m*(m-1)/2
 cv = qchisq(1-alpha/M,M-1)  ### critical value
-print(cv)
+cv
 # parameter for method 2
 x = seq(1,4,length=1000)
 y = 1 - 2*(1 - pnorm(x)) - 4*(m-2)*(1-pnorm(x*sqrt(2)))
 a = min(x[y >= 1 - alpha])  ### a value
-print(a)
+a
 ```
 
 ### Generate simulation
 
-Generate 2 simulated data, for example:
+For simplicity, only 2 columns of simulated data are demonstrated here:
 
 ```{r data, echo=T}
 set.seed(321)
@@ -44,7 +52,19 @@ df =  rbind(rmultinom(2, size = sampleSizeVector[1], prob = p),trialID = 1:2)
 df
 ```
 
-Each column is one poll. You can see the distribtuion is about `r p`. Then a function is designed to compute the confidence interval using method 1 and method 2. **This function is going to be the importance one, because it is the most basic part for confidence interval computation regardless what's the distribution or whether it is mixed or not.**
+Each column is one poll. You can see the distribtuion is about `r p`. The trialID is added to record the column location. Later on, we can use this information to calculate the jointed coverage ratio for each poll. 
+
+
+### Confidence interval function
+
+The idea is to design the most basic function of all computation.   
+
+So this function should input 2 sets of parameters:  
+
+
+*  data: one column
+*  pair difference: the string & positions
+
 
 ```{r}
 ## singleSample: the one single column you want to calculate
@@ -54,12 +74,10 @@ Each column is one poll. You can see the distribtuion is about `r p`. Then a fun
 
 confiFun <- function(singleSample,type,i,j){
   N = sum(singleSample[1:3])   #the column sum; sample size
-
   phat_i = singleSample[i] / N  # the estimated p_i
   phat_j = singleSample[j] / N # the estimated p_j
   
   delta = phat_i- phat_j       #Differences Between Multinomial Proportions
-  
   d_ij = phat_i + phat_j - delta^2 # d_ij for method 1
   
   # each vector has results from method 1 and method 2
@@ -75,13 +93,17 @@ confiFun <- function(singleSample,type,i,j){
 
 Let's apply this function to our data. Suppose we want to calculate the delta_12, which is p1-p2.
 
-
 ```{r}
 delta_12 = apply(df, 2,confiFun,type="p1-p2",i=1,j=2)
 delta_12
 ```
 
-Since we have two column, the result is the length 2 list, where each element is a dataframe. Looks good. Then we have to try different sample size, which can be done using a function. And we can embed all 3 pair difference to one sampleSize. Check the **apply** build-in function. Check the **Reduce** build-in function.
+Since we have two column, the result is the length 2 list, where each element is a dataframe. 
+
+
+### pair differences for each sample size
+
+To be more efficient, we build a higher level function on top of __confiFun__. It could take one sample size and return all pair difference results from both methods at one shot. 
 
 ```{r}
 confiDataFun <- function(sampleSize,nrep=2){
@@ -105,14 +127,15 @@ Use this function to repeat what we just did.
 confiDataFun(sampleSize = 500,nrep=2)
 ```
 
-Then we have all three pair difference in one shot. The sampleSize column is to distinguish the result from different sampleSize. Let's try two sample size: 500, 1000,1500. Check the **lapply** build-in function.
+Let's try all sample size: 500, 1000,1500.
 
 ```{r}
+sampleSizeVector
 confiList = lapply(sampleSizeVector, confiDataFun)
 confiList
 ```
 
-Therefore, we get the result for one specific distribtuion. Combine them into one dataframe and save it for plotting. 
+Therefore, we get a list of result for one specific distribtuion. Combine them into one dataframe and save it for plotting. 
 
 ```{r}
 confiData = Reduce(rbind,confiList)
@@ -120,7 +143,7 @@ confiData
 saveRDS(confiData,"YL_Q1a_example.rds") ## R format data type
 ```
 
-## Question 2
+## Question 2: Contamination
 
 ### Generating data
 
@@ -130,7 +153,10 @@ p = c(0.46,0.44,0.1)
 r = c(0.34,0.33,0.33)
 df
 ```
-Back to our earlier example. The sample size is 500. (Column sum). nrep=2. (Column number)
+
+Back to our earlier example. The sample size is 500. (Column sum). nrep=2. (Column number). 
+
+Using __rbinom__ to sepearate people into not going to vote and goint to vote. In this way, their sum is still 500.
 
 
 ```{r}
@@ -144,6 +170,7 @@ sampleSize_V  # the number of people going to vote, for column 1 and column 2
 ```
 
 Then, we want to generate data according to each sample size (each column would have different sample size for people vote and not vote)
+
 ```{r}
 
 VList = lapply(sampleSize_V,function(x){
@@ -152,6 +179,8 @@ VList = lapply(sampleSize_V,function(x){
 
 Vmat = Reduce(cbind,VList) # transfer to matrix format
 Vmat #the exact number for people vote for p1 p2 p3
+
+
 NVList = lapply(sampleSize_NV,function(x){
   rmultinom(1, size = x, prob = r)
 })
@@ -165,7 +194,7 @@ dfmix
 colSums(dfmix)
 ```
 
-Once we have the similiar data at question 1. We can just simply apply the defined functions.
+Once we have the similiar data structure at question 1. We can simply apply defined functions.
 
 ```{r}
 dfmix = rbind(dfmix,trialID=1:2) # add trial id as last row
@@ -173,7 +202,11 @@ tmp = apply(dfmix, 2,confiFun,type="p1-p2",i=1,j=2)
 tmp
 ```
 
-Then we can design a function that generate mix data and calucate the pair difference, which is similar to confiDataFun. 
+
+Then we can design another higher level function that taking given sample size and mix ratio to do:
+
+1. Generate mix data
+2. calucate the pair difference using __confiFun__.
 
 ```{r}
 confiMixDataFun <- function(sampleSize,q,r = c(0.34,0.33,0.33),nrep=2){
@@ -220,7 +253,7 @@ resMix = lapply(seq(0.1,0.5,by=0.1), function(q){
 resMix
 ```
 
-Combine and save
+Combine and save.
 
 ```{r}
 saveRDS(Reduce(rbind,resMix),'YL_Q2_example.rds')

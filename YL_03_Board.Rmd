@@ -86,6 +86,12 @@ renderTable({
 Outputs
 -----------------------------------------------------------------------
 
+
+### Confidence Intervals {data-height=100}
+* __Large sample sizes help to narrow the confidence intervals for both method__
+* __Interval length from Method 1 varies for different delta, while Method 2 is fixed__
+    + p1-p2: method 1 is wider; p2-p3: method 2 is wider;
+    
 ### Confidence Intervals
 
 ```{r}
@@ -102,7 +108,7 @@ renderPlot({
       geom_ribbon(aes(ymin= confiLower,ymax = confiUpper,fill=method),alpha=0.5)+
       geom_hline(yintercept = tvalue(),size=1,color="dodgerblue4") + 
       scale_y_continuous(breaks=seq(-0.25,0.65,0.1),limits=c(-0.25, 0.65)) + 
-      theme_minimal() + theme(legend.position = 'bottom')
+      theme_minimal() + theme(legend.position = 'right')
   
   print(p)
 })
@@ -148,6 +154,11 @@ renderTable({
 Outputs
 -----------------------------------------------------------------------
 
+### Observations: {data-height=100}
+* __Large sample sizes help to narrow the confidence intervals for both method__
+* __Interval length from Method 1 varies for different delta, while Method 2 is fixed__
+    + p1-p2: method 1 is wider; p2-p3: method 2 is wider;
+
 ### Confidence Intervals
 
 ```{r}
@@ -164,7 +175,7 @@ renderPlot({
       geom_ribbon(aes(ymin= confiLower,ymax = confiUpper,fill=method),alpha=0.5)+
       geom_hline(yintercept = tvalue1b(),size=1,color="dodgerblue4") +
       scale_y_continuous(breaks=seq(-0.25,0.65,0.1),limits=c(-0.25, 0.65)) +
-      theme_minimal() + theme(legend.position = 'bottom')
+      theme_minimal() + theme(legend.position = 'right')
   
   print(p)
 })
@@ -215,7 +226,13 @@ renderTable({
 Outputs
 -----------------------------------------------------------------------
 
+
+### Additional Observations: {data-height=90}
+* __Generally Increasing mix ratio moves the confidence interval away from "originals value".__    
+* __But it may still cover individual "original value", if the pair difference doesn't change too much after contamination.__
+
 ### Confidence Intervals
+
 
 ```{r}
 dataset2 <- reactive({
@@ -231,7 +248,7 @@ renderPlot({
       geom_ribbon(aes(ymin= confiLower,ymax = confiUpper,fill=method),alpha=0.5)+
       geom_hline(yintercept = tvalue2(),size=1,color="dodgerblue4") +
       scale_y_continuous(breaks=seq(-0.25,0.65,0.1),limits=c(-0.25, 0.65)) +
-      theme_minimal() + theme(legend.position = 'bottom')
+      theme_minimal() + theme(legend.position = 'right')
   
   print(p2)
 })
