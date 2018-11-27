@@ -3,7 +3,7 @@
 ## Instructions:
 The detail for this project is [here](https://www.utdallas.edu/~ammann/stat6341/node10.html).
 
-TLDR: Simulate Bonferroni's confidence interval and Fitzpatrick confidence interval for difference in cadidate preference during a poll in various scenarios.
+TLDR: Simulate Bonferroni's confidence interval and Fitzpatrick confidence interval for the difference in cadidate preference during a poll for various scenarios.
 
 ## Results:
 
@@ -16,20 +16,20 @@ https://zxynj.shinyapps.io/Midterm_election_simulation_project_Stat_6341/
 
 ## Task:
 
-### Yitao: Algorithm explanation
+#### Yitao: Algorithm explanation
 
 https://yitao416.github.io/onlinePlots/Archive/YL_10_cal.html
 
-## Xiao: Individual coverage ratio
+#### Xiao: Individual coverage ratio
 
 An online shiny app is created for this project (Nov 1)
 https://yitao.shinyapps.io/YL_03_Board_02/
 
 
-## Erica: Simultaneous coverage confidence interval (Nov 3)
+#### Erica: Simultaneous coverage confidence interval (Nov 3)
 
 https://yitao416.github.io/onlinePlots/Archive/YL_05_coverRatioBoard.html
 
-## Xinyu: All in one interactive shiny app
+#### Xinyu: All in one interactive shiny app
 
 https://github.com/zxynj/Midterm-election-simulation-project/tree/master/All%20in%20one%20shiny%20app
