@@ -1,10 +1,13 @@
 # Midterm-election-simulation-project
 
-## Oct 12
-The result is saved as rds format. Download them into your local directory. And use readRDS function to load the data. 
+## Instructions:
+The detail for this project is [here](https://www.utdallas.edu/~ammann/stat6341/node10.html).
 
 
-## YL: 
+
+The results are saved as rds format. Download them into your local directory. And use readRDS function to load the data. 
+
+## Yitao: 
 
 https://yitao416.github.io/onlinePlots/Archive/YL_10_cal.html
 
