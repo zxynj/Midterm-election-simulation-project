@@ -3,27 +3,33 @@
 ## Instructions:
 The detail for this project is [here](https://www.utdallas.edu/~ammann/stat6341/node10.html).
 
+TLDR: Simulate Bonferroni's confidence interval and Fitzpatrick confidence interval for difference in cadidate preference during a poll in various scenarios.
 
+## Results:
 
-The results are saved as rds format. Download them into your local directory. And use readRDS function to load the data. 
+1. Interactive shiny app:
+https://zxynj.shinyapps.io/Midterm_election_simulation_project_Stat_6341/
 
-## Yitao: 
+2. Results are saved as rds files. One can [download](https://github.com/zxynj/Midterm-election-simulation-project/tree/master/Result%20rds%20file) them and use readRDS function to load the data.
+
+3. The markdown of algorithm explanation and presentation is [here](https://github.com/zxynj/Midterm-election-simulation-project/tree/master/Presentation).
+
+## Task:
+
+### Yitao: Algorithm explanation
 
 https://yitao416.github.io/onlinePlots/Archive/YL_10_cal.html
 
+## Xiao: Individual coverage ratio
 
-## Xiao: An online shiny app is created for this project (Nov 1)
-
+An online shiny app is created for this project (Nov 1)
 https://yitao.shinyapps.io/YL_03_Board_02/
 
 
-## Erica: the coverage ratio plot (Nov 3)
+## Erica: Simultaneous coverage confidence interval (Nov 3)
 
 https://yitao416.github.io/onlinePlots/Archive/YL_05_coverRatioBoard.html
 
+## Xinyu: All in one interactive shiny app
 
-# Task:
-
-Download all files ending with **rds** to your local directory. 
-
-
+https://github.com/zxynj/Midterm-election-simulation-project/tree/master/All%20in%20one%20shiny%20app
