@@ -1,4 +1,4 @@
-# Midterm-election-simulation-project
+# Midterm Election Simulation Project
 
 ## Instructions:
 The detail for this project is [here](https://www.utdallas.edu/~ammann/stat6341/node10.html).
