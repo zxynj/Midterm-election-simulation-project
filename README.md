@@ -1,7 +1,7 @@
 # Midterm Election Simulation Project
 
 ## Instructions:
-The detail for this project is [here](https://www.utdallas.edu/~ammann/stat6341/node10.html).
+The detail for this project is [here](https://www.utdallas.edu/~ammann/stat6341/node13.html).
 
 TLDR: Simulate Bonferroni's confidence interval and Fitzpatrick confidence interval for the difference in cadidate preference during a poll for various scenarios.
 
